@@ -270,11 +270,11 @@ The minimum variance is a graph of the lowest possible variance that can be atta
 The formula for returns is given by:
 
 
-$ 
+$$ 
 \begin{aligned}
-r_{t} = \frac{p_t}{p_{t-1}} $$
+r_{t} = \frac{p_t}{p_{t-1}}
 \end{aligned}
-$
+$$
 
 Where:
 -  $t$  is the time,
