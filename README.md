@@ -139,7 +139,6 @@ Sharp ratio is used to compare one portfolio to another portfolio.
                 			sharp ratio = (expected return - 0.1) / expected volatility 
 
 - put all the data into two data frames by creating two data frames and calculate the sharp ratio for the overall trained dataset.
--  
 
 # **Portfolio Optimisation: Monte Carlo** 
 
