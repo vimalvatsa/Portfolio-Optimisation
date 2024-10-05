@@ -89,9 +89,9 @@ symbols = [‘APPL’, ...]
 ![WhatsApp Image 2024-10-05 at 03 18 29](https://github.com/user-attachments/assets/a6bd6322-a242-46fe-bdf5-df2877ce23ea)
 
 
-Return above risk free ratio = Return of Portfolio/Expected return (Rp) - Risk free rate (Rf) 
+    Return above risk free ratio = Return of Portfolio/Expected return (Rp) - Risk free rate (Rf) 
 
-Sharpe ratio (in %) = Risk above risk free ratio / Expected risk
+    Sharpe ratio (in %) = Risk above risk free ratio / Expected risk
 
 There’s no point taking less return than the risk free rate allows us to do. 
 
@@ -121,22 +121,22 @@ Sharp ratio is used to compare one portfolio to another portfolio.
 
 - Random weights are then transformed to rebalanced weights because then it can actually be of value more than 1. All of them sum up to 1. (# Generate the rebalance weights) 
 
-    Rebalance weights = random weights / sum(random weights)
+       Rebalance weights = random weights / sum(random weights)
 
 
 
 - Now we calculate out expected returns:  
 
-                  Expected returns = sum((log\_returns.mean() \* rebalance weights ) \* 252 )
+      Expected returns = sum((log\_returns.mean() \* rebalance weights ) \* 252 )
   (We do  (daily returns)\* 252 to annualise it ^^) 
 
 - Calculating the expected volatility, annualised !! (if the asset price is moving up a lot or down): 
 
-                Expected volatility = [ Transpose(rebalanced weights) . ((log\_returns.covariance() \* 252) . rebalance weights)] ^ 1/2 . 
+       Expected volatility = [ Transpose(rebalanced weights) . ((log\_returns.covariance() \* 252) . rebalance weights)] ^ 1/2 . 
 
 - Calculating the sharp ratio:
 
-                			sharp ratio = (expected return - 0.1) / expected volatility 
+      sharp ratio = (expected return - 0.1) / expected volatility 
 
 - put all the data into two data frames by creating two data frames and calculate the sharp ratio for the overall trained dataset.
 
@@ -156,22 +156,21 @@ Coding steps:
 2. Store simulation in some type of array for each - weights, returns, volatility, sharp ratios with bunch of zeroes (all\_weights = np. zeros(num\_of\_portfolios, number\_of\_symbols),   Prep the returns array of numpy zeroes:  ret\_arr = np.zeroes(num\_of\_portfolios), same type of format for volatility as well as sharp ratio)
 
 3. Start the simulation (in loop):
-          1. First calculate the weights (no. of weights that match the number of symbols):
 
-                        weights = np.array(np.random.random(number\_of\_symbols)  
-`         2. The portfolio is 100% allocated :
+`          `1. First calculate the weights (no. of weights that match the number of symbols):
 
-                        weights = weights / np.sum(weights)
+                weights = np.array(np.random.random(number_of_symbols)  
+`         `2. The portfolio is 100% allocated :
 
-`         3. Adding the weights to the weights array
+                 weights = weights / np.sum(weights)
 
-`         4. Calculate the expected log returns (using logs because it’s better for time series) 
+`         `3. Adding the weights to the weights array
 
-`         5.  Calculating the volatility and adding them to the volatility array:
+`         `4. Calculate the expected log returns (using logs because it’s better for time series) 
 
-`              We want each price of our portfolio to contribute to the overall portfolio evenly, based on how much they actually represent if the portfolio.
-
-`              In simple words - how much volatility that particular instrument is contributing to the overall  portfolio. Also add the assets which are correlated with each other. 
+`         `5.  Calculating the volatility and adding them to the volatility array:
+           We want each price of our portfolio to contribute to the overall portfolio evenly, based on how much they actually represent if the portfolio.
+          In simple words - how much volatility that particular instrument is contributing to the overall  portfolio. Also add the assets which are correlated with each other. 
 
 `        6. Calculating the Sharp ratio using the sharp array at the current index of the loop which we are on = (return\_array[i] - 0.01) / volatility\_array[i] 
 
