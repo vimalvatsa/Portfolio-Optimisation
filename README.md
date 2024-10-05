@@ -86,7 +86,8 @@ symbols = [‘APPL’, ...]
 
 4\. Risk free rates - rates that we can get by taking no risk. Example - the return rates on the US treasury, as it is never going to dissolve, so no risk to be taken. 
 
-To![WhatsApp Image 2024-10-05 at 03 18 29](https://github.com/user-attachments/assets/178c7926-1b09-4dd2-9eab-e157e482d4c3)
+![WhatsApp Image 2024-10-05 at 03 18 29](https://github.com/user-attachments/assets/a6bd6322-a242-46fe-bdf5-df2877ce23ea)
+
 
 Return above risk free ratio = Return of Portfolio/Expected return (Rp) - Risk free rate (Rf) 
 
@@ -95,10 +96,12 @@ Sharpe ratio (in %) = Risk above risk free ratio / Expected risk
 There’s no point taking less return than the risk free rate allows us to do. 
 
 To calculate the expected returns (how much does each individual asset take up my portfolio and the return associated to it, contributed to the total return of a portfolio), we use the formula :
-![WhatsApp Image 2024-10-05 at 03 18 32](https://github.com/user-attachments/assets/bc661121-e06b-48b4-bba4-0fc42ddfa604)
+![WhatsApp Image 2024-10-05 at 03 18 32](https://github.com/user-attachments/assets/bbeaed67-b1c0-402c-b040-f10541513eec)
+
 
  calculate the standard deviation of the portfolio (summation of the variance of change in the asset value of each asset price + the correlation coefficient between each of the assets as well) : 
-![WhatsApp Image 2024-10-05 at 03 18 42](https://github.com/user-attachments/assets/771120da-d5ef-43fd-80b6-355952f10078)
+![WhatsApp Image 2024-10-05 at 03 18 42](https://github.com/user-attachments/assets/1d8dd0be-2dd4-4c5d-99ff-a1a8e351d004)
+
 
 Sharp ratio is used to compare one portfolio to another portfolio. 
 
@@ -273,8 +276,7 @@ Markowitz portfolio optimisation model : The minimum variance is a graph of the 
 
 ## Returns: 
 
-![WhatsApp Image 2024-10-05 at 03 30 33](https://github.com/user-attachments/assets/45e48327-5634-4115-b02f-e24debae9559)
-
+![WhatsApp Image 2024-10-05 at 03 30 33](https://github.com/user-attachments/assets/248d66ce-4b08-4af6-aa9f-f1fade77c06f)
 
 returns = r\_t = p\_t / p\_(t - 1) 
 
@@ -318,8 +320,9 @@ Now we measure the confidence of our views as inverse of omega.
 
 Black-litterman formula gives us the estimate of excess returns by calculating weighted average of two items. This paper is also trying to prove that the Bayesian formula for expected returns is true. 
 
-![WhatsApp Image 2024-10-05 at 03 30 44](https://github.com/user-attachments/assets/36ed6b31-b1b6-45c6-8d11-b1c01ce3e912)
-![WhatsApp Image 2024-10-05 at 03 31 01](https://github.com/user-attachments/assets/98ce8a36-3a41-46ee-b25c-81b7ec4c2a10)
+![WhatsApp Image 2024-10-05 at 03 30 44](https://github.com/user-attachments/assets/148489ed-d51c-4206-9188-bf7e2e40628d)
+![WhatsApp Image 2024-10-05 at 03 31 01](https://github.com/user-attachments/assets/cd3218d7-0130-4cd2-8c1f-852d984c0f97)
+
 
 
 The 1st and the 2nd terms of the black-litterman formula are defined in (III) in notes attached. Refer part (IV) for the complete Black-Litterman formula. 
@@ -331,33 +334,34 @@ Black-litterman has allowed us to have the freedom of having our own views refle
 ## **Bayesian approach and python implementation of Black-Litterman framework:**
 Alan Scowcroft and Stephen Satchell tried to explain this framework a bit more in detail. The framework explains the interrelationship between traditional managers and quantitative managers, it’s a unification of the two. 
 
-
-![implied_returns_from_the_equilibrium_model](https://github.com/user-attachments/assets/ca9892a5-47af-409a-8295-0b6b130b5258)
-
+![WhatsApp Image 2024-10-05 at 03 31 09](https://github.com/user-attachments/assets/e84b2a3f-6bcf-46ab-93be-c02f540c9a65)
 
 Beta is less useful for long-term investments since a stock’s volatility can change significantly from year to year, depending upon the company’s growth stage and other factors. 
 
 The given image bellow represents the forecast of manager/investor after updating for the information from the quantitative model : 
-
-![forecast_manager](https://github.com/user-attachments/assets/fbb815e9-3ee3-45e7-85ac-27e30dfd9db8)
+![WhatsApp Image 2024-10-05 at 03 31 19](https://github.com/user-attachments/assets/18db6be9-ee48-4524-9267-dbbda1de3035)
 
 
 ## Theorem 1 : q, omega are our Bayesian hyper parameters for k beliefs, P is k by n matrix 
-     The pdf of E(r) (expected return) given pi is given by a posterior probability density function where 1st term is the mean and 2nd term is the variance .  
-![Theorem1](https://github.com/user-attachments/assets/0c2a9e39-0640-49ce-8e04-b3a279be3bd3)
+
+The pdf of E(r) (expected return) given pi is given by a posterior probability density function where 1st term is the mean and 2nd term is the variance .
+
+![WhatsApp Image 2024-10-05 at 03 31 28](https://github.com/user-attachments/assets/b15d9c5d-6274-42b0-9e16-07dcd2f03a0f)
+
 
 
 ## Theorem-2: 
-![Theorem2](https://github.com/user-attachments/assets/12f28c2c-a5b4-46f3-a4e1-7c2cbc7d6e15)
-
+![WhatsApp Image 2024-10-05 at 03 31 35](https://github.com/user-attachments/assets/e2e8f10c-cbc0-466b-8598-ee77ca243317)
 
 Implementation in python using pyportfolioopt. (Refer the file - black-litterman\_framework.ipynb):
 
 For prior, the implied risk premium is calculated as market’s excess return divided by it’s variance by using the formula :  
-![implied_risk_premium](https://github.com/user-attachments/assets/e9d431ae-d4bf-431e-b072-0dfc9415e615)
+  ![WhatsApp Image 2024-10-05 at 03 31 42](https://github.com/user-attachments/assets/d420a8c7-0b2d-4edf-ab0a-e07acca09476)
+
 
  Market implied returns vector:  
-  ![returns_vector](https://github.com/user-attachments/assets/f7d7bb0a-2c7b-4eef-8cfa-72cf7fcd74fb)
+  ![WhatsApp Image 2024-10-05 at 03 31 48](https://github.com/user-attachments/assets/0e7d7468-9480-49fe-9a62-fe5847bb535e)
+
 
 # **CAPM (Capital Asset Pricing Model):**
 
