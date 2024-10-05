@@ -172,19 +172,19 @@ Coding steps:
            We want each price of our portfolio to contribute to the overall portfolio evenly, based on how much they actually represent if the portfolio.
           In simple words - how much volatility that particular instrument is contributing to the overall  portfolio. Also add the assets which are correlated with each other. 
 
-`        6. Calculating the Sharp ratio using the sharp array at the current index of the loop which we are on = (return\_array[i] - 0.01) / volatility\_array[i] 
+`        `6. Calculating the Sharp ratio using the sharp array at the current index of the loop which we are on = (return\_array[i] - 0.01) / volatility\_array[i] 
 
-`        7. Combining all of this together outside the main loop: 
+`        `7. Combining all of this together outside the main loop: 
 
 `              Simulations\_data  = [return\_array, volatility\_array, sharp\_array, all\_weights]
 
-`        8. Creating a data frame for our dataset ^^ (transposed dataset - simulations\_data) 
+`        `8. Creating a data frame for our dataset ^^ (transposed dataset - simulations\_data) 
 
-`        9. Adding the column names 
+`        `9. Adding the column names 
 
-`       10. Making sure that all the data present in the data frame has the right data type using infer\_object() method
+`       `10. Making sure that all the data present in the data frame has the right data type using infer\_object() method
 
-`       11. Printing the result. 
+`       `11. Printing the result. 
 
 ## **Grabbing the important Metrics:**
 
@@ -206,79 +206,77 @@ Drawbacks of the Monte Carlo simulations is : the more number of iterations you 
 - On y-axis : Returns 
 - On x-axis : Volatility
 - Values to get for the graph : Sharp Ratios
-**
-`   `- Plotting the max sharp ratio using the red star. 
-
-` `- plotting min volatility with blue star 
-
-`  `- print the plot (show)
+  - Plotting the max sharp ratio using the red star. 
+  - plotting min volatility with blue star 
+  - print the plot (show)
 
 ## **Optimisation (using sci-py optimisation module)**
 
-1. `  `Write a function to pass through the optimisation module 
-1. 1st function - get\_metrics: gets a list of weights from our particular list -> return a numpy array with weights :
+1. Write a function to pass through the optimisation module 
+2. 1st function
+     - get\_metrics: gets a list of weights from our particular list -> return a numpy array with weights :
+     - convert the weights to a numpy array
+     - calculate the returns (annualised):
+                 **ret = np.sum(log\_mean() \* weights) \* 252**
+      -  calculate the volatility by transposing the weights and multiplying them with the (dot product(covariance of returns (log) \* 252, weights)) in a dot product:
+             **vol = np.sqtr(np.dot(weights.T, np.dot(log\_return.cov() \* 252, weights)))**
+      - calculate the sharp ratio: sr = (ret - 0.01) / vol
+      - return a numpy array back with array([ret, vol, sr])
 
-`         `**- convert the weights to a numpy array**
-
-`         `**- calculate the returns (annualised): ret = np.sum(log\_mean() \* weights) \* 252** 
-
-`        `-  calculate the volatility by transposing the weights and multiplying them with the (dot product(covariance of returns (log) \* 252, weights)) in a dot product: 
-
-`              `vol = np.sqtr(np.dot(weights.T, np.dot(log\_return.cov() \* 252, weights)))
-
-`        `- calculate the sharp ratio: sr = (ret - 0.01) / vol
-
-`        `- return a numpy array back with array([ret, vol, sr])
-
-Note: If we want to optimise based on the sharpe ratio we need to define a function that returns only the sharpe ratio. Since our optimisation function naturally seek to minimise, we can minimise one of the two quantities: The negative of the sharpe ratio. (or 1/(1+Sharpe Ratio). Accordingly, if the sharpe ratio increases both of these quantities will decrease. We'll chose the negative of sharpe for this example. 
+**Note**: If we want to optimise based on the sharpe ratio we need to define a function that returns only the sharpe ratio. Since our optimisation function naturally seek to minimise, we can minimise one of the two quantities: The negative of the sharpe ratio. (or 1/(1+Sharpe Ratio). Accordingly, if the sharpe ratio increases both of these quantities will decrease. We'll chose the negative of sharpe for this example. 
 
 We use the SLSQP (Sequential Lest Squares Programming) method to minimise the results.  
 
-`  `3. Next function - grab negative sharp ratio with weights as argument returning numpy array as a list datatype:
+3. Next function - grab negative sharp ratio with weights as argument returning numpy array as a list datatype:
+        - we’re trying to minimise the negative sharp ratio 
+        - return get\_metrics(weights)[2] - 1
 
-`      `- we’re trying to minimise the negative sharp ratio 
+4. Define a function to grab volatility with parameter - weights and returns numpy array: return get\_metrics(weights)[1]
 
-`      `- return get\_metrics(weights)[2] - 1
+5.  Define a check sum function which makes sure the weights do not exceed a 100 %: you cannot have a 100% of your portfolio allocated. (we define constraints) 
+6.   Define bounds using tuples in our optimisation process. 
+7.   Defining the constraints (weights do not increase 100%) : type - equality constraint, function : check\_sum 
+8. Define the initial guesses : number\_of\_symbols \* [1 / number\_of\_symbols] 
+9. Perform the optimisation process : 
+...
 
-` `4. Define a function to grab volatility with parameter - weights and returns numpy array: return get\_metrics(weights)[1]
+    ```python
+    optimized_sharpe = sci_plt.minimize(
+        grab_negative_sharpe,  # what we need to minimise
+        init_guess,            # these are the initial weights
+        method='SLSQP',
+        constraints=constraints,
+    )
+    ```
 
-` `5.  Define a check sum function which makes sure the weights do not exceed a 100 %: you cannot have a 100% of your portfolio allocated. (we define constraints) 
-` `6. Define bounds using tuples in our optimisation process. 
-` `7. Defining the constraints (weights do not increase 100%) : type - equality constraint, function : check\_sum 
-` `8. Define the initial guesses : number\_of\_symbols \* [1 / number\_of\_symbols] 
-` `9. Perform the optimisation process : 
+...
 
-`        `optimized\_sharpe = sci\_plt.minimize(
+10. Print optimised sharpe ratio. 
 
-`                 `grab\_negative\_sharpe, # what we need to minimise
-
-`                 `init\_guess, # these are the initial weights
-
-`                 `method = ‘SLSQP’,
-
-`                  `constraints = constraints, 
-
-`                  `) 
-
-`  `10. Print optimised sharpe ratio. 
-
-` `11. Grab the optimised sharpe ratio weights metrics and print that specifically. 
-` `12. We repeat the same process for the volatility aspect (use grab\_volatility() function) - find the least volatility and optimise it. 
+11. Grab the optimised sharpe ratio weights metrics and print that specifically. 
+12. We repeat the same process for the volatility aspect (use grab\_volatility() function) - find the least volatility and optimise it. 
 
 
 
 # **Markowitz Efficient Portfolio Optimisation Technique  : Stock market analysis & Markowitz Efficient Frontier on Python**
 
-Markowitz portfolio optimisation model : The minimum variance is a graph of the lowest possible variance that can be attained for any given level of expected return. The global minimum variance portfolio is the portfolio of risky assets that has lowest variance of all risky assets portfolios. The efficient frontier is the range of all investments that are within the minimum-variance frontier and are above (have a higher return than) the global minimum variance portfolio.
+**Markowitz portfolio optimisation model** : 
+The minimum variance is a graph of the lowest possible variance that can be attained for any given level of expected return. The global minimum variance portfolio is the portfolio of risky assets that has lowest variance of all risky assets portfolios. The efficient frontier is the range of all investments that are within the minimum-variance frontier and are above (have a higher return than) the global minimum variance portfolio.
 
 
 ## Returns: 
 
 ![WhatsApp Image 2024-10-05 at 03 30 33](https://github.com/user-attachments/assets/248d66ce-4b08-4af6-aa9f-f1fade77c06f)
 
-returns = r\_t = p\_t / p\_(t - 1) 
+The formula for returns is given by:
 
-` `t - time, p\_t - price at time (t) 
+\[
+r_t = \frac{p_t}{p_{t-1}}
+\]
+
+Where:
+- \( t \) is the time,
+- \( p_t \) is the price at time \( t \).
 
 
 # **The Black-Litterman Model: (Active portfolio management)**
@@ -304,11 +302,11 @@ If we’re in agreement with the excess returns thus generated, we should hold t
 
 Views about the stocks that comprise the portfolio. We can have absolute views like return on Google stock is 2%, in the near future. We can have relative views, for example, return on Amazon’s stock will be greater than Apple’s stock by 1%. In practice, relative views are more common and we will use them for our discussion. 
 
-Example given in the notes attached - refer (II). 
+Example given in the notes attached - refer (II) in Handwritten Notes
 
-Implied Returns + Investor Views = Expected Returns 
+     Implied Returns + Investor Views = Expected Returns 
 
-The risk(uncertainty with the expected returns) is represented by using the variance covariance matrix (S). - refer (II)
+The risk(uncertainty with the expected returns) is represented by using the variance covariance matrix (S). - refer (II) in Handwritten Notes
 
 Measure of confidence about our expected implied equilibrium returns- S^(-1).
 
@@ -351,13 +349,13 @@ The pdf of E(r) (expected return) given pi is given by a posterior probability d
 ## Theorem-2: 
 ![WhatsApp Image 2024-10-05 at 03 31 35](https://github.com/user-attachments/assets/e2e8f10c-cbc0-466b-8598-ee77ca243317)
 
-Implementation in python using pyportfolioopt. (Refer the file - black-litterman\_framework.ipynb):
+**Implementation in python using pyportfolioopt. (Refer the file - black-litterman\_framework.ipynb)**
 
-For prior, the implied risk premium is calculated as market’s excess return divided by it’s variance by using the formula :  
+For prior, the **implied risk premium** is calculated as market’s excess return divided by it’s variance by using the formula :  
   ![WhatsApp Image 2024-10-05 at 03 31 42](https://github.com/user-attachments/assets/d420a8c7-0b2d-4edf-ab0a-e07acca09476)
 
 
- Market implied returns vector:  
+ **Market implied returns vector**:  
   ![WhatsApp Image 2024-10-05 at 03 31 48](https://github.com/user-attachments/assets/0e7d7468-9480-49fe-9a62-fe5847bb535e)
 
 
