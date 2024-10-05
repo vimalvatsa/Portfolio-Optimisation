@@ -268,10 +268,10 @@ The minimum variance is a graph of the lowest possible variance that can be atta
 ![WhatsApp Image 2024-10-05 at 03 30 33](https://github.com/user-attachments/assets/248d66ce-4b08-4af6-aa9f-f1fade77c06f)
 
 The formula for returns is given by:
-
-\[
-r_t = \frac{p_t}{p_{t-1}}
-\]
+```{math}
+:label: my-equation
+r_{t} = \frac{p_t}{p_{t-1}}
+```
 
 Where:
 - \( t \) is the time,
