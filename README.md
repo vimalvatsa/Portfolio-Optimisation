@@ -238,7 +238,7 @@ We use the SLSQP (Sequential Lest Squares Programming) method to minimise the re
 7.   Defining the constraints (weights do not increase 100%) : type - equality constraint, function : check\_sum 
 8. Define the initial guesses : number\_of\_symbols \* [1 / number\_of\_symbols] 
 9. Perform the optimisation process : 
-...
+
 
     ```python
     optimized_sharpe = sci_plt.minimize(
@@ -249,7 +249,6 @@ We use the SLSQP (Sequential Lest Squares Programming) method to minimise the re
     )
     ```
 
-...
 
 10. Print optimised sharpe ratio. 
 
